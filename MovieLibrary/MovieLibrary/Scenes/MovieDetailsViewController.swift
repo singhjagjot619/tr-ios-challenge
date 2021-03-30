@@ -70,7 +70,9 @@ class MovieDetailsViewController: UIViewController {
             }
             DispatchQueue.main.async() {
                 self.movieNameLabel.text = details.name
-                self.movieDateLabel.text = "\(details.releaseDate!)"
+                let dateString = self.formatDate(interval: details.releaseDate!)
+                
+                self.movieDateLabel.text = "Date of Release: \(dateString)"
                 self.descriptionLabel.text = details.description!
                 self.plotLabel.text = details.notes
             }
@@ -92,5 +94,14 @@ class MovieDetailsViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func formatDate(interval: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(interval))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MMM-yyyy"
+        let dateString = dateFormatter.string(from: date)
+        
+        return dateString
     }
 }

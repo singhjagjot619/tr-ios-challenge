@@ -93,11 +93,25 @@ class APIClient {
     }
     
     func getImage(url:URL,_ completionHandler: @escaping(_ data:Data?) -> Void) ->Void{
+        if let cachedImage = self.getCacheImage(url.absoluteString){
+            completionHandler(cachedImage)
+            return
+        }
         self.requestApi(url: url) { (data, response, error) in
             if let data = data{
+                self.setCacheImage(data, strUrl: url.absoluteString)
                 completionHandler(data)
+            } else {
+                self.setCacheImage(Data(), strUrl: url.absoluteString)
             }
             completionHandler(nil)
         }
     }
+    
+     func getCacheImage(_ strUrl:String) -> Data?{
+          return APIClient.imageCache.object(forKey: strUrl as AnyObject) as? Data
+      }
+      func setCacheImage(_ data:Data?, strUrl:String){
+          APIClient.imageCache.setObject(data as AnyObject, forKey: strUrl as AnyObject)
+      }
 }
