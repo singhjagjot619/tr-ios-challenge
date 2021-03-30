@@ -15,17 +15,17 @@ class MovieDetailsViewModel : NSObject {
 
     private(set) var movieDetails : MovieDetails! {
         didSet {
-            self.bindMoviesViewModelToController()
+            self.bindMovieDetailsModelToController()
         }
     }
     
     private(set) var recommendations : Movies! {
         didSet {
-            self.bindMoviesViewModelToController()
+            self.bindMovieDetailsModelToController()
         }
     }
     
-    var bindMoviesViewModelToController : (() -> ()) = {}
+    var bindMovieDetailsModelToController : (() -> ()) = {}
     
     init(id: Int) {
         super.init()
@@ -34,19 +34,22 @@ class MovieDetailsViewModel : NSObject {
         getListOfRecommendations(id: id)
     }
     
+    // getMovieDetails(_ id) responsible to fetch movie details for the given movie id from the API
     func getMovieDetails(id: Int) {
         self.apiClient.fetchMovieDetails(id) { (details, error) in
             self.movieDetails = details
         }
     }
     
+    // getListOfRecommendations(_ id) responsible to fetch list of movie recommendations for the given movie id from the API
     func getListOfRecommendations(id: Int) {
         self.apiClient.fetchRecommendationsList(id, { (movies, error)  in
             self.recommendations = movies
         })
     }
     
-    func getImageAtURL(urlString: String,_ completionHandler: @escaping(_ data:Data?) -> Void) {
+    // getImageAtURL(_ urlString,  _ completionHandler) gets the image data from the Url string
+    func getImageAtURL(urlString: String, _ completionHandler: @escaping(_ data:Data?) -> Void) {
         self.apiClient.getImage(url: URL(string: urlString)!) {data in
             completionHandler(data)
         }

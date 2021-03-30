@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         self.updateUI()
     }
     
+    // updateUI() updates UI based on thee callback from the view model
     func updateUI(){
         self.moviesViewModel = MoviesViewModel()
         self.moviesViewModel.bindMoviesViewModelToController = {
@@ -34,6 +35,7 @@ class ViewController: UIViewController {
         }
     }
     
+    // updateDataSource() updates the data required to show the lis of movies
     func updateDataSource(){
         if let moviesData = self.moviesViewModel.moviesData {
             self.dataSource = MoviesTableViewDataSource(cellIdentifier: "MoviesCell", items: moviesData.movies, configureCell: { (cell, movie) in
@@ -51,9 +53,7 @@ class ViewController: UIViewController {
             }, didSelectMovie: { (movie) in
                 let detailsViewController = self.storyboard?.instantiateViewController(withIdentifier: "details")
                     as? MovieDetailsViewController
-                
-                detailsViewController?.movie=movie
-                
+                detailsViewController?.movieId = movie.id
                 self.navigationController?.pushViewController(detailsViewController!, animated: true)
             })
             

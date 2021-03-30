@@ -27,12 +27,14 @@ class MoviesViewModel : NSObject {
         getListOfMovies()
     }
     
+    // getMovieDetails() responsible to fetch list of movies from the API
     func getListOfMovies() {
         self.apiClient.fetchMoviesList(listUrl, { (movies, error)  in
             self.moviesData = movies
         })
     }
     
+    // getImageAtURL(_ urlString,  _ completionHandler) gets the image data from the Url string
     func getImageAtURL(urlString: String,_ completionHandler: @escaping(_ data:Data?) -> Void) {
         self.apiClient.getImage(url: URL(string: urlString)!) {data in
             completionHandler(data)
